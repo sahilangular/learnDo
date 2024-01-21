@@ -2,8 +2,7 @@ import axios from "axios";
 import { generate } from "random-words";
 import _ from "lodash";
 
-const key = import.meta.env.VITE_RAPID_API_KEY as string
-
+const key = import.meta.env.VITE_RAPID_API_KEY as string;
 
 const generateMCQ = (
   meaning: {
@@ -28,7 +27,6 @@ const generateMCQ = (
 };
 
 export const translateWords = async (params: langType) => {
-
   try {
     const words = generate(8).map((i) => ({
       Text: i,
@@ -46,7 +44,7 @@ export const translateWords = async (params: langType) => {
         },
         headers: {
           "content-type": "application/json",
-          "X-RapidAPI-Key":key,
+          "X-RapidAPI-Key": key,
           "X-RapidAPI-Host": "microsoft-translator-text.p.rapidapi.com",
         },
       }
@@ -85,13 +83,13 @@ export const fetchAudio = async (
   text: string,
   lang: langType
 ): Promise<string> => {
-  const speechKey = import.meta.env.VITE_RAPID_SPEECH_KEY as string
+  const speechKey = import.meta.env.VITE_RAPID_SPEECH_KEY as string;
   const encodedParams = new URLSearchParams({
     src: text,
     r: "0",
     c: "mp3",
     f: "8khz_8bit_mono",
-    'b64':'true'
+    b64: "true",
   });
 
   if (lang === "ja") encodedParams.set("hl", "ja-jp");
@@ -99,14 +97,18 @@ export const fetchAudio = async (
   else if (lang === "Fr") encodedParams.set("hl", "fr-fr");
   else encodedParams.set("hl", "hi-in");
 
- const {data}:{data:string}= await axios.post("https://voicerss-text-to-speech.p.rapidapi.com/", encodedParams, {
-    params: { key:speechKey  },
-    headers: {
-      "content-type": "application/x-www-form-urlencoded",
-      "X-RapidAPI-Key": key,
-      "X-RapidAPI-Host": "voicerss-text-to-speech.p.rapidapi.com",
-    },
-  });
+  const { data }: { data: string } = await axios.post(
+    "https://voicerss-text-to-speech.p.rapidapi.com/",
+    encodedParams,
+    {
+      params: { key: speechKey },
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+        "X-RapidAPI-Key": key,
+        "X-RapidAPI-Host": "voicerss-text-to-speech.p.rapidapi.com",
+      },
+    }
+  );
 
   return data;
 };
